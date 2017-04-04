@@ -1,0 +1,64 @@
+---
+title: "HW2-Problem2"
+author: "Devin Etcitty"
+date: "4/4/2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+library(tidyverse)
+library(modelr)
+```
+
+Read data
+
+```{r}
+data <- read_tsv('polyfit.tsv')
+```
+
+shuffle the data and assign each row to one of 5 different folds
+make sure to use this seed
+```{r}
+set.seed(4990)
+
+```
+
+
+implement 5-fold cross-validation to compute the average train / test error (RMSE) for each polynomial degree
+```{r}
+
+```
+
+make a plot showing the how the train and test error vary with the polynomial degree
+```{r}
+
+```
+
+
+select the degree with the lowest average test error
+```{r}
+
+```
+
+fit a final model for this degree on all of the data
+```{r}
+
+```
+
+
+make a scatter plot of all of the data with the best-fit model overlayed as a line
+```{r}
+
+```
+
+report the coefficients for the best-fit model
+```{r}
+
+```
+
