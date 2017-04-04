@@ -1,0 +1,45 @@
+---
+title: "HW2-problem3"
+author: "Devin Etcitty"
+date: "4/4/2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(modelr)
+
+```
+
+
+## load the oj data
+```{r}
+oj <- read_csv('oj.csv')
+```
+
+
+
+## regress logmove on log(price)
+
+```{r}
+
+```
+
+
+## regress logmove on log(price) with brand interactions
+
+```{r}
+
+```
+
+
+## regress logmove on log(price) interacted with brand and feat
+
+```{r}
+
+```
+
