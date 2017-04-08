@@ -40,6 +40,11 @@ summary(model1)
 ```
 
 
+```{r}
+
+```
+
+
 ## regress logmove on log(price) with brand interactions
 
 ```{r}
@@ -58,6 +63,9 @@ model2.2 <- lm(logmove ~ log(price) + brand, oj)
 summary(model2.2)
 ```
 
+```{r}
+plot(model2.2)
+```
 
 
 ```{r}
@@ -66,10 +74,18 @@ summary(model2.3)
 ```
 
 
+```{r}
+plot(model2.3)
+```
+
+
 ## regress logmove on log(price) interacted with brand and feat
 
 ```{r}
 model3 <- lm(logmove ~ log(price)*brand*feat, oj)
 summary(model3)
+```
+```{r}
+plot(model3)
 ```
 
