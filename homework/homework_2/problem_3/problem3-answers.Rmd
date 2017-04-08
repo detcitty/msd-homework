@@ -22,24 +22,34 @@ oj <- read_csv('oj.csv')
 ```
 
 
+```{r}
+oj
+```
+
+```{r}
+plot(oj)
+```
+
+
 
 ## regress logmove on log(price)
 
 ```{r}
-
+model1 <- 
 ```
 
 
 ## regress logmove on log(price) with brand interactions
 
 ```{r}
-
+model2 <- 
 ```
 
 
 ## regress logmove on log(price) interacted with brand and feat
 
 ```{r}
-
+model3 <- lm(logmove ~ log(price)*brand*feat, oj)
+summary(model3)
 ```
 
