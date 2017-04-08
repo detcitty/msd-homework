@@ -35,14 +35,34 @@ plot(oj)
 ## regress logmove on log(price)
 
 ```{r}
-model1 <- 
+model1 <- lm(logmove ~ log(price), oj)
+summary(model1)
 ```
 
 
 ## regress logmove on log(price) with brand interactions
 
 ```{r}
-model2 <- 
+model2 <- lm(logmove ~ log(price)*brand, oj)
+summary(model2)
+```
+
+
+```{r}
+model2.1 <- lm(logmove ~ log(price):brand, oj)
+summary(model2.1)
+```
+
+```{r}
+model2.2 <- lm(logmove ~ log(price) + brand, oj)
+summary(model2.2)
+```
+
+
+
+```{r}
+model2.3 <- lm(logmove ~ log(price) + log(price):brand, oj)
+summary(model2.3)
 ```
 
 
