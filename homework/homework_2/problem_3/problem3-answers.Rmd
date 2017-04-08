@@ -38,6 +38,9 @@ oj
 logmove <- oj$logmove
 price_log <- log(oj$price)
 
+summary(logmove)
+summary(price_log)
+
 qplot(logmove, price_log)
 ```
 
@@ -52,9 +55,19 @@ summary(model1)
 
 
 ```{r}
-
+brand <- oj$brand
+qplot(brand, price_log)
 ```
 
+
+```{r}
+qplot(brand, logmove)
+```
+
+
+```{r}
+qplot(logmove, brand)
+```
 
 ## regress logmove on log(price) with brand interactions
 
@@ -91,6 +104,12 @@ plot(model2.3)
 
 
 ## regress logmove on log(price) interacted with brand and feat
+
+```{r}
+feat <- oj$feat
+summary(feat)
+```
+
 
 ```{r}
 model3 <- lm(logmove ~ log(price)*brand*feat, oj)
