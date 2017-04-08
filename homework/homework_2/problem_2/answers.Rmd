@@ -30,6 +30,17 @@ set.seed(4990)
 ```
 
 
+```{r}
+data
+
+```
+
+
+```{r}
+plot(data)
+```
+
+
 implement 5-fold cross-validation to compute the average train / test error (RMSE) for each polynomial degree
 ```{r}
 

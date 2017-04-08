@@ -15,3 +15,10 @@ Your task is to compute for each pair of phone numbers the total amount of time 
 3. Suppose the dataset is a call log of a nation of 300,000,000 people, each of whom calls 200 people on average. Please describe how you would compute the statistics.
 
 In writing your descriptions above, you don't need to provide actual working code, but please provide enough detail that someone can easily implement your approach. What differences are there between the three different approaches? Would you use an in-memory or streaming approach? A single machine or multiple machines?
+
+
+-----------
+I'd use graph theory
+
+Each caller would be 1 node. Therefore for problem 1.1, there would be about 100,00 nodes. Problem 1.2 would have 10,000,000 nodes and problem 1.3 would have about 300,000,000 nodes
+

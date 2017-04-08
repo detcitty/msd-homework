@@ -4,7 +4,10 @@
 #
 
 # count the number of unique stations
+# cut 201608-citibike-tripdata.csv -d , -f 3
 
+awk -F, '/Park/ { print $0 }' 201608-citibike-tripdata.csv
+awk -F, '/New York/ { print $1} ' 201608-citibike-tripdata.csv 
 # count the number of unique bikes
 
 # count the number of trips per day

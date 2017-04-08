@@ -2,7 +2,9 @@
 title: "HW2-problem3"
 author: "Devin Etcitty"
 date: "4/4/2017"
-output: pdf_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -12,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 library(modelr)
+library(ggplot2)
 
 ```
 
@@ -22,24 +25,97 @@ oj <- read_csv('oj.csv')
 ```
 
 
+```{r}
+oj
+```
+
+```{r}
+#plot(oj)
+```
+
+
+```{r}
+logmove <- oj$logmove
+price_log <- log(oj$price)
+
+summary(logmove)
+summary(price_log)
+
+qplot(logmove, price_log)
+```
+
+
 
 ## regress logmove on log(price)
 
 ```{r}
-
+model1 <- lm(logmove ~ log(price), oj)
+summary(model1)
 ```
 
+
+```{r}
+brand <- oj$brand
+qplot(brand, price_log)
+```
+
+
+```{r}
+qplot(brand, logmove)
+```
+
+
+```{r}
+qplot(logmove, brand)
+```
 
 ## regress logmove on log(price) with brand interactions
 
 ```{r}
+model2 <- lm(logmove ~ log(price)*brand, oj)
+summary(model2)
+```
 
+
+```{r}
+model2.1 <- lm(logmove ~ log(price):brand, oj)
+summary(model2.1)
+```
+
+```{r}
+model2.2 <- lm(logmove ~ log(price) + brand, oj)
+summary(model2.2)
+```
+
+```{r}
+plot(model2.2)
+```
+
+
+```{r}
+model2.3 <- lm(logmove ~ log(price) + log(price):brand, oj)
+summary(model2.3)
+```
+
+
+```{r}
+plot(model2.3)
 ```
 
 
 ## regress logmove on log(price) interacted with brand and feat
 
 ```{r}
+feat <- oj$feat
+summary(feat)
+```
 
+
+```{r}
+model3 <- lm(logmove ~ log(price)*brand*feat, oj)
+summary(model3)
+```
+```{r}
+plot(model3)
 ```
 

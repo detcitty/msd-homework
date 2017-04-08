@@ -9,5 +9,7 @@ For each of parts a) through d), indicate whether we would generally expect the 
   c) The relationship between the predictors and response is highly non-linear.
 
   d) The variance of the error terms, i.e. Var(ε), is extremely high.
+      Variance is very high, which means the test is not very precies. That gives sporadic 
+      answers. 
 
 Note: This problem was taken from Section 2.4 of [An Introduction to Statistical Learning](http://www-bcf.usc.edu/~gareth/ISL/).
