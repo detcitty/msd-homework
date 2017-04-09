@@ -1,5 +1,16 @@
 library(tidyverse)
 library(ggplot2)
+library(modelr)
+library(methods)
+
+
+
+set.seed(955)
+# Make some noisily increasing data
+dat <- data.frame(cond = rep(c("A", "B"), each=10),
+                  xvar = 1:20 + rnorm(20,sd=3),
+                  yvar = 1:20 + rnorm(20,sd=3))
+
 
 # Set color by cond
 ggplot(dat, aes(x=xvar, y=yvar, color=cond)) + geom_point(shape=1)
