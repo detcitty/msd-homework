@@ -39,7 +39,18 @@ names(oj)
 ```
 
 ```{r}
+summary(oj)
+```
 
+```{r}
+ggplot(oj, aes(x = log(price), y = logmove, color=brand)) +
+  geom_point() 
+  # geom_line(oj, aes(x = log(price), y = logmove))
+```
+
+```{r}
+ggplot(oj, aes(x = log(price), y = logmove)) +
+  geom_point() 
 ```
 
 ```{r}
