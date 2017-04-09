@@ -2,7 +2,7 @@ library(tidyverse)
 library(ggplot2)
 library(modelr)
 library(methods)
-
+library(scales)
 
 
 set.seed(955)
