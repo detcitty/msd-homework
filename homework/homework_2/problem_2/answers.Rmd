@@ -35,9 +35,19 @@ data
 
 ```
 
+```{r}
+names(data)
+```
+
+
 
 ```{r}
 plot(data)
+```
+
+```{r}
+ggplot(data, aes(x, y)) +
+  geom_point()
 ```
 
 
