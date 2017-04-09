@@ -35,6 +35,14 @@ oj
 
 
 ```{r}
+names(oj)
+```
+
+```{r}
+
+```
+
+```{r}
 logmove <- oj$logmove
 price_log <- log(oj$price)
 
