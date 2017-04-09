@@ -1,6 +1,9 @@
 library(tidyverse)
 library(lubridate)
 
+
+library(ggplot2)
+
 ########################################
 # READ AND TRANSFORM THE DATA
 ########################################
@@ -16,6 +19,19 @@ trips <- mutate(trips, starttime = mdy_hms(starttime), stoptime = mdy_hms(stopti
 
 # recode gender as a factor 0->"Unknown", 1->"Male", 2->"Female"
 trips <- mutate(trips, gender = factor(gender, levels=c(0,1,2), labels = c("Unknown","Male","Female")))
+
+names(trips)
+
+
+########################################
+# Graph and Plotting
+########################################
+
+#plot(trips)
+
+
+ggplot(trips, aes(x = "start station id", y = "tripduration")) +
+  geom_point()
 
 
 ########################################
