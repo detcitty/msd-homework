@@ -61,8 +61,15 @@ qplot(brand, price_log)
 
 
 ```{r}
-qplot(brand, logmove)
+qplot(logmove, data = oj, geom = "bar")
 ```
+
+```{r}
+c <- ggplot(data=oj, group=factor(brand)) +
+  geom_bar(aes(brand))
+c
+```
+
 
 
 ```{r}
