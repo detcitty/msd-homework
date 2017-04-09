@@ -1,3 +1,6 @@
+library(tidyverse)
+library(ggplot2)
+
 # Set color by cond
 ggplot(dat, aes(x=xvar, y=yvar, color=cond)) + geom_point(shape=1)
 
