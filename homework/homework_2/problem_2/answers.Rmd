@@ -35,15 +35,26 @@ data
 
 ```
 
+```{r}
+names(data)
+```
+
+
 
 ```{r}
 plot(data)
 ```
 
+```{r}
+ggplot(data, aes(x, y)) +
+  geom_point()
+```
+
 
 implement 5-fold cross-validation to compute the average train / test error (RMSE) for each polynomial degree
 ```{r}
-
+cv5 <- crossv_kfold(data, 5)
+cv5
 ```
 
 make a plot showing the how the train and test error vary with the polynomial degree

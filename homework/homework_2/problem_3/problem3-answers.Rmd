@@ -35,6 +35,25 @@ oj
 
 
 ```{r}
+names(oj)
+```
+
+```{r}
+summary(oj)
+```
+
+```{r}
+ggplot(oj, aes(x = log(price), y = logmove, color=brand)) +
+  geom_point() 
+  # geom_line(oj, aes(x = log(price), y = logmove))
+```
+
+```{r}
+ggplot(oj, aes(x = log(price), y = logmove)) +
+  geom_point() 
+```
+
+```{r}
 logmove <- oj$logmove
 price_log <- log(oj$price)
 
@@ -61,8 +80,15 @@ qplot(brand, price_log)
 
 
 ```{r}
-qplot(brand, logmove)
+qplot(logmove, data = oj, geom = "bar")
 ```
+
+```{r}
+c <- ggplot(data=oj, group=factor(brand)) +
+  geom_bar(aes(brand))
+c
+```
+
 
 
 ```{r}
