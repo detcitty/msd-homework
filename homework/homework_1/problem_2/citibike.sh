@@ -34,6 +34,14 @@ awk -F, '/New York/ { print $1} ' 201608-citibike-tripdata.csv
 ## Get that id of the bike id
 
 # count the number of rides by gender and birth year
+## Condition on male
+## Count number of lines
+## Condition on females
+## Count number of lines
+## Condition on year
+## Count each of those
+
+
 
 # count the number of trips that start on cross streets that both contain numbers (e.g., "1 Ave & E 15 St", "E 39 St & 2 Ave", ...)
 ## use regular expressions,
@@ -44,3 +52,8 @@ awk -F, '/New York/ { print $1} ' 201608-citibike-tripdata.csv
 
 
 # compute the average trip duration
+## Subtract end time minus start time
+## to get trip duration
+## Sum of the total trip duration
+## Divide by the number of entries
+##
