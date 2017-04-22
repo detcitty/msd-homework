@@ -7,9 +7,15 @@ library(ggplot2)
 # read business and world articles into one data frame
 
 # create a Corpus from the article snippets
+# VCorpus?
+# Corpus
 
 # create a DocumentTermMatrix from the snippet Corpus
 # remove punctuation and numbers
+
+# What is a DocumentTermMatrix?
+# How does this relate to what I'm doing? 
+
 
 # convert the DocumentTermMatrix to a sparseMatrix, required by cv.glmnet
 # helper function
