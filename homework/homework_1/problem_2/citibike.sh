@@ -5,17 +5,13 @@
 
 # count the number of unique stations
 # cut 201608-citibike-tripdata.csv -d , -f 3
-<<<<<<< HEAD
-
-awk -F, '/Park/ { print $0 }' 201608-citibike-tripdata.csv
-awk -F, '/New York/ { print $1} ' 201608-citibike-tripdata.csv 
 
 
-=======
+
+
 # Regular expressions of text are in the /{text}/
 # awk -F, '/Park/ { print $0 }' 201608-citibike-tripdata.csv
 # awk -F, '/New York/ { print $1} ' 201608-citibike-tripdata.csv 
->>>>>>> hw1prob2
 # count the number of unique bikes
 ##
 ##

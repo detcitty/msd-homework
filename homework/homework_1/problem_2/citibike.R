@@ -39,16 +39,34 @@ ggplot(trips, aes(x = "start station id", y = "tripduration")) +
 ########################################
 
 # count the number of trips (= rows in the data frame)
+nrow(trips)
 
 # find the earliest and latest birth years (see help for max and min to deal with NAs)
+max(trips["birth_year"], na.rm = TRUE)
+min(trips["birth_year"], na.rm = TRUE)
+
+
 
 # use filter and grepl to find all trips that either start or end on broadway
 
 # do the same, but find all trips that both start and end on broadway
 
 # find all unique station names
+select(trips, start_station_name) %>%
+  unique()
+
+select(trips, end_station_name) %>%
+  unique()
 
 # count the number of trips by gender
+filter(trips, gender == "Male") %>%
+  select(gender) %>%
+  count()
+
+filter(trips, gender == "Female") %>%
+  select(gender) %>%
+  count()
+
 
 # compute the average trip time by gender
 # comment on whether there's a (statistically) significant difference
@@ -61,6 +79,7 @@ ggplot(trips, aes(x = "start station id", y = "tripduration")) +
 
 # find the day with the most trips
 # tip: first add a column for year/month/day without time of day (use as.Date or floor_date from the lubridate package)
+
 
 # compute the average number of trips taken during each of the 24 hours of the day across the entire month
 # what time(s) of day tend to be peak hour(s)?
