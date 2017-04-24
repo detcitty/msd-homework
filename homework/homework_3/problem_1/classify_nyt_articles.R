@@ -6,7 +6,11 @@ library(ggplot2)
 
 # read business and world articles into one data frame
 
+business <- read.table('business.tsv', quote="",header=TRUE, sep="\t")
+world <- read.table('world.tsv', quote="", header=TRUE, sep="\t", encoding = "utf-8")
+
 # create a Corpus from the article snippets
+
 # VCorpus?
 # Corpus
 
