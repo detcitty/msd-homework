@@ -1,0 +1,68 @@
+---
+title: "Problem3"
+author: "Devin Etcitty"
+date: "4/25/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(scales)
+```
+
+#### Read in undweighted10.dat
+First, read in the edge list for 2010 from the undweighted10.dat file
+
+```{r}
+setwd("~/columbia/APMA4990/msd-homework/homework/homework_3/problem_3")
+year2010 <- read.delim("undweighted10.dat", header = FALSE, sep = ' ')
+colnames(year2010) <- c('userID1', 'userID2', 'num_email')
+
+```
+
+
+Make a plot of the distribution of edge weights for the entire network
+Use a log-log scale and comment on the result. What does it tell you about the distribution of tie strength?
+
+```{r}
+count_df <- year2010 %>% 
+  count(num_email)
+
+count_df
+
+```
+
+# Graph
+
+```{r}
+ggplot(count_df, aes(x=num_email, y =n)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10()
+
+
+```
+
+
+```{r}
+ggplot(count_df, aes(x=n, y =num_email)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10()
+
+```
+
+
+```{r}
+ggplot(count_df, aes(x=num_email, y=n)) +
+  geom_jitter() +
+  scale_x_log10(name = "Number of Emails Sent", labels=comma) +
+  scale_y_log10(name = "Number of People", labels=comma) 
+```
+
