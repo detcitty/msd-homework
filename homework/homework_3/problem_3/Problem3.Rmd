@@ -89,13 +89,13 @@ filter(year2010, num_email > power2) %>% count()
 #ddply(year2010, )
 
 
-mod_func <- function(arr, df) {   
-  filter(df, num_email > x) %>%
+mod_func <- function(arr, df, x) {   
+  arr <- filter(df, num_email > x) %>%
     count()
-  data.frame(num_nodes = countnodes)
+  return(arr)
 }
 
-adply(power2, mod_func, df=year2010)
+ddply(power2, mod_func, df=year2010, x=power2)
 
 
 year2010 %>% 
@@ -131,6 +131,33 @@ year2010 %>%
   mutate_all(po)
 
 adply(power2, function(x) {})
+
+
+```
+
+
+```{r}
+for(i in power2) {
+  df <- year2010 %>%
+    filter(num_email > i)
+  g <- graph_from_data_frame(year2010, directed = FALSE, vertices = NULL)
+  nodes <- gorder(g)
+  edges <- gsize(g)
+  num_connect_comps <- no.clusters(g)
+  clus <- clusters(g)
+  mem <- clus$membership
+  
+  print(attributes(mem))
+  
+  #print(num_connect_comps)
+  #print(g$num_email)
+  #print(clus$no)
+  group1 <- length(mem[mem==2])
+  #print(group1)
+  #print(g)
+  #freq_nodes <- count(df, "num_email")
+  #print(freq_nodes)
+}
 
 
 ```
