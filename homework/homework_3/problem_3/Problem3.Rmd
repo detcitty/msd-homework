@@ -16,6 +16,7 @@ library(tidyverse)
 library(scales)
 library(igraph)
 library(plyr)
+library(reshape2)
 ```
 
 #### Read in undweighted10.dat
@@ -101,13 +102,36 @@ year2010 %>%
   rowwise() %>%
   mutate(var = 1)
 
-function(df, x) {
-  df %>% 
+boy <- function(df, x) {
+  df %>%
   rowwise() %>%
-  mutate(var = x)
+  add_column(var = x) %>%
+  #mutate(var = x)
+  
+  
   return(df)
 }
 
-#ddply(year2010, 2, add_column)
+boy(year2010, 33)
+
+boy(year2010, power2)
+ddply(year2010, boy, x=power2)
+```
+
+
+
+
+```{r}
+po <- as.data.frame(t(power2))
+po %>%
+  mutate_all()
+
+year2010 %>%
+  
+  mutate_all(po)
+
+adply(power2, function(x) {})
+
+
 ```
 
