@@ -14,6 +14,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(tidyverse)
 library(scales)
+library(igraph)
+library(plyr)
 ```
 
 #### Read in undweighted10.dat
@@ -64,5 +66,40 @@ ggplot(count_df, aes(x=num_email, y=n)) +
   geom_jitter() +
   scale_x_log10(name = "Number of Emails Sent", labels=comma) +
   scale_y_log10(name = "Number of People", labels=comma) 
+```
+
+
+```{r}
+power2 <- 2^(0:10)
+power2 <- append(power2, 0, 0)
+power2
+```
+
+
+for(threshold in power2) {
+  filter(year2010, num_email > threshold) %>%
+    count() %>%
+    print()
+  
+}
+
+```{r}
+filter(year2010, num_email > power2) %>% count()
+#ddply(year2010, )
+
+
+mod_func <- function(arr, df) {   
+  filter(df, num_email > x) %>%
+    count()
+  data.frame(num_nodes = countnodes)
+}
+
+adply(power2, mod_func, df=year2010)
+
+
+year2010 %>% 
+  rowwise() %>%
+  mutate(var = 1)
+#ddply(year2010, 2, add_column)
 ```
 
