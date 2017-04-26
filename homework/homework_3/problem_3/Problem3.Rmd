@@ -100,6 +100,14 @@ adply(power2, mod_func, df=year2010)
 year2010 %>% 
   rowwise() %>%
   mutate(var = 1)
+
+function(df, x) {
+  df %>% 
+  rowwise() %>%
+  mutate(var = x)
+  return(df)
+}
+
 #ddply(year2010, 2, add_column)
 ```
 
