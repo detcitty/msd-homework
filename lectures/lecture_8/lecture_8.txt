@@ -1,0 +1,921 @@
+classification
+chris.wiggins@columbia.edu
+
+2017-03-10
+
+wat?
+
+example: spam/ham
+
+(cf. jake’s great deck on this)
+
+Learning by example
+
+Jake Hofman
+
+(Columbia University)
+
+Classification: Naive Bayes
+
+February 27, 2015
+
+2 / 16
+
+Learning by example
+
+• How did you solve this problem?
+• Can you make this process explicit (e.g. write code to do so)?
+
+Jake Hofman
+
+(Columbia University)
+
+Classification: Naive Bayes
+
+February 27, 2015
+
+2 / 16
+
+classification?
+
+build a theory of 3’s?
+
+1-slide summary of classification
+• banana or orange?
+
+what would Gauss do?
+
+1-slide summary of classification
+• banana or orange?
+
+height
+
+length
+what would Gauss do?
+
+1-slide summary of classification
+• banana or orange?
+
+height
+
+time of purchase
+length
+
+smell
+
+price
+
+1-slide summary of classification
+• banana or orange?
+
+height
+
+length
+
+game theory:
+“assume the worst”
+
+1-slide summary of classification
+• banana or orange?
+
+height
+
+length
+
+large deviation theory:
+“maximum margin”
+
+1-slide summary of classification
+• banana or orange?
+
+height
+
+length
+
+large deviation theory:
+“maximum margin”
+
+1-slide summary of classification
+• banana or orange?
+
+height
+
+time of purchase
+length
+
+smell
+
+price
+
+boosting (1997)
+SVMs (1990s)
+
+1-slide summary of classification
+• up- or down- regulated?
+“gaga” & gene 137 up?
+“cat” & gene 11 up?
+
+“gataca” &
+gene 37 down?
+“tag” &
+gene 34 up?
+
+“acgt” & gene 45 down?
+“gaga” & gene
+1066 up?
+
+learn predictive
+features from data
+
+example: bad bananas
+
+example@NYT in CAR (computer assisted reporting)
+
+Figure 1: Tabuchi article
+
+example in CAR (computer assisted reporting)
+◮
+
+cf. Friedman’s “Statistical models and Shoe Leather”1
+
+example in CAR (computer assisted reporting)
+◮
+◮
+
+cf. Friedman’s “Statistical models and Shoe Leather”1
+Takata airbag fatalities
+
+example in CAR (computer assisted reporting)
+◮
+◮
+◮
+
+cf. Friedman’s “Statistical models and Shoe Leather”1
+Takata airbag fatalities
+2219 labeled2 examples from 33,204 comments
+
+example in CAR (computer assisted reporting)
+◮
+◮
+◮
+◮
+
+cf. Friedman’s “Statistical models and Shoe Leather”1
+Takata airbag fatalities
+2219 labeled2 examples from 33,204 comments
+cf. Box’s “Science and Statistics”3
+
+computer assisted reporting
+◮
+
+Impact
+
+Figure 3: impact
+
+conjecture: cost function?
+
+fallback: probability
+
+review: regression as probability
+
+classification as probability
+
+binary/dichotomous/boolean features + NB
+
+digression: bayes rule
+
+generalize, maintain linerarity
+
+Learning by example
+
+• How did you solve this problem?
+• Can you make this process explicit (e.g. write code to do so)?
+
+Jake Hofman
+
+(Columbia University)
+
+Classification: Naive Bayes
+
+February 27, 2015
+
+2 / 16
+
+Diagnoses a la Bayes1
+
+• You’re testing for a rare disease:
+• 1% of the population is infected
+• You have a highly sensitive and specific test:
+• 99% of sick patients test positive
+• 99% of healthy patients test negative
+• Given that a patient tests positive, what is probability the
+
+patient is sick?
+
+1
+Jake Hofman
+
+Wiggins, SciAm 2006
+(Columbia University)
+
+Classification: Naive Bayes
+
+February 27, 2015
+
+3 / 16
+
+Diagnoses a la Bayes
+
+Population
+10,000 ppl
+
+1% Sick
+100 ppl
+99% Test +
+99 ppl
+
+Jake Hofman
+
+(Columbia University)
+
+99% Healthy
+9900 ppl
+
+1% Test 1 per
+
+1% Test +
+99 ppl
+
+Classification: Naive Bayes
+
+99% Test 9801 ppl
+
+February 27, 2015
+
+4 / 16
+
+Diagnoses a la Bayes
+Population
+10,000 ppl
+
+1% Sick
+100 ppl
+99% Test +
+99 ppl
+
+99% Healthy
+9900 ppl
+
+1% Test 1 per
+
+1% Test +
+99 ppl
+
+99% Test 9801 ppl
+
+So given that a patient tests positive (198 ppl), there is a 50%
+chance the patient is sick (99 ppl)!
+
+Jake Hofman
+
+(Columbia University)
+
+Classification: Naive Bayes
+
+February 27, 2015
+
+4 / 16
+
+Diagnoses a la Bayes
+Population
+10,000 ppl
+
+1% Sick
+100 ppl
+99% Test +
+99 ppl
+
+99% Healthy
+9900 ppl
+
+1% Test 1 per
+
+1% Test +
+99 ppl
+
+99% Test 9801 ppl
+
+The small error rate on the large healthy population produces
+many false positives.
+
+Jake Hofman
+
+(Columbia University)
+
+Classification: Naive Bayes
+
+February 27, 2015
+
+4 / 16
+
+Natural frequencies a la Gigerenzer2
+
+2
+Jake Hofman
+
+http://bit.ly/ggbbc
+(Columbia University)
+
+Classification: Naive Bayes
+
+February 27, 2015
+
+5 / 16
+
+Inverting conditional probabilities
+
+Bayes’ Theorem
+Equate the far right- and left-hand sides of product rule
+p (y |x) p (x) = p (x, y ) = p (x|y ) p (y )
+and divide to get the probability of y given x from the probability
+of x given y :
+p (x|y ) p (y )
+p (y |x) =
+p (x)
+where p (x) =
+
+Jake Hofman
+
+P
+
+(Columbia University)
+
+y ∈ΩY
+
+p (x|y ) p (y ) is the normalization constant.
+
+Classification: Naive Bayes
+
+February 27, 2015
+
+6 / 16
+
+Diagnoses a la Bayes
+
+Given that a patient tests positive, what is probability the patient
+is sick?
+99/100
+
+p (sick|+) =
+
+1/100
+
+z }| { z }| {
+p (+|sick) p (sick)
+p (+)
+| {z }
+
+1
+99
+=
+=
+198
+2
+
+99/1002 +99/1002 =198/1002
+
+where p (+) = p (+|sick) p (sick) + p (+|healthy ) p (healthy ).
+
+Jake Hofman
+
+(Columbia University)
+
+Classification: Naive Bayes
+
+February 27, 2015
+
+7 / 16
+
+(Super) Naive Bayes
+We can use Bayes’ rule to build a one-word spam classifier:
+p (word|spam) p (spam)
+p (spam|word) =
+p (word)
+where we estimate these probabilities with ratios of counts:
+p̂(word|spam) =
+
+Jake Hofman
+
+p̂(word|ham)
+
+=
+
+p̂(spam)
+
+=
+
+p̂(ham)
+
+=
+
+(Columbia University)
+
+# spam docs containing word
+# spam docs
+# ham docs containing word
+# ham docs
+# spam docs
+# docs
+# ham docs
+# docs
+
+Classification: Naive Bayes
+
+February 27, 2015
+
+8 / 16
+
+(Super) Naive Bayes
+$ ./enron_naive_bayes.sh meeting
+1500 spam examples
+3672 ham examples
+16 spam examples containing meeting
+153 ham examples containing meeting
+estimated
+estimated
+estimated
+estimated
+
+P(spam) = .2900
+P(ham) = .7100
+P(meeting|spam) = .0106
+P(meeting|ham) = .0416
+
+P(spam|meeting) = .0923
+
+Jake Hofman
+
+(Columbia University)
+
+Classification: Naive Bayes
+
+February 27, 2015
+
+9 / 16
+
+(Super) Naive Bayes
+$ ./enron_naive_bayes.sh money
+1500 spam examples
+3672 ham examples
+194 spam examples containing money
+50 ham examples containing money
+estimated
+estimated
+estimated
+estimated
+
+P(spam) = .2900
+P(ham) = .7100
+P(money|spam) = .1293
+P(money|ham) = .0136
+
+P(spam|money) = .7957
+
+Jake Hofman
+
+(Columbia University)
+
+Classification: Naive Bayes
+
+February 27, 2015
+
+10 / 16
+
+(Super) Naive Bayes
+$ ./enron_naive_bayes.sh enron
+1500 spam examples
+3672 ham examples
+0 spam examples containing enron
+1478 ham examples containing enron
+estimated
+estimated
+estimated
+estimated
+
+P(spam) = .2900
+P(ham) = .7100
+P(enron|spam) = 0
+P(enron|ham) = .4025
+
+P(spam|enron) = 0
+
+Jake Hofman
+
+(Columbia University)
+
+Classification: Naive Bayes
+
+February 27, 2015
+
+11 / 16
+
+Naive Bayes
+
+Represent each document by a binary vector ~x where xj = 1 if the
+j-th word appears in the document (xj = 0 otherwise).
+Modeling each word as an independent Bernoulli random variable,
+the probability of observing a document ~x of class c is:
+Y xj
+p (~x |c) =
+✓jc (1 − ✓jc )1−xj
+j
+
+where ✓jc denotes the probability that the j-th word occurs in a
+document of class c.
+
+Jake Hofman
+
+(Columbia University)
+
+Classification: Naive Bayes
+
+February 27, 2015
+
+12 / 16
+
+Naive Bayes
+
+Using this likelihood in Bayes’ rule and taking a logarithm, we have:
+p (~x |c) p (c)
+log p (c|~x ) = log
+p (~x )
+X
+X
+✓jc
+✓c
+=
+xj log
++
+log(1 − ✓jc ) + log
+1 − ✓jc
+p (~x )
+j
+
+j
+
+where ✓c is the probability of observing a document of class c.
+
+Jake Hofman
+
+(Columbia University)
+
+Classification: Naive Bayes
+
+February 27, 2015
+
+13 / 16
+
+(a) big picture: surrogate convex loss functions
+
+general
+
+Figure 4: Reminder: Surrogate Loss Functions
+
+boosting
+
+Figure 5: ‘Cited by 12599’
+
+tangent: logistic function as surrogate loss function
+
+◮
+
+define f (x ) ≡ log p(y = 1|x )/p(y = −1|x ) ∈ R
+
+tangent: logistic function as surrogate loss function
+
+◮
+
+define f (x ) ≡ log p(y = 1|x )/p(y = −1|x ) ∈ R
+
+◮
+
+p(y = 1|x ) + p(y = −1|x ) = 1 → p(y |x ) = 1/(1 + exp(−yf ))
+
+tangent: logistic function as surrogate loss function
+
+◮
+
+define f (x ) ≡ log p(y = 1|x )/p(y = −1|x ) ∈ R
+
+◮
+
+p(y = 1|x ) + p(y = −1|x ) = 1 → p(y |x ) = 1/(1 + exp(−yf ))
+
+◮
+
+− log2 p({y }N
+1)=
+
+
+
+
+
+−yi f (xi ) ≡
+i log2 1 + e
+
+P
+
+P
+
+i
+
+ℓ(yi f (xi ))
+
+tangent: logistic function as surrogate loss function
+
+◮
+
+define f (x ) ≡ log p(y = 1|x )/p(y = −1|x ) ∈ R
+
+◮
+
+p(y = 1|x ) + p(y = −1|x ) = 1 → p(y |x ) = 1/(1 + exp(−yf ))
+
+◮
+
+− log2 p({y }N
+1)=
+
+◮
+
+ℓ′′ > 0, ℓ(µ) > 1[µ < 0] ∀µ ∈ R.
+
+
+
+
+
+−yi f (xi ) ≡
+i log2 1 + e
+
+P
+
+P
+
+i
+
+ℓ(yi f (xi ))
+
+tangent: logistic function as surrogate loss function
+
+◮
+
+define f (x ) ≡ log p(y = 1|x )/p(y = −1|x ) ∈ R
+
+◮
+
+p(y = 1|x ) + p(y = −1|x ) = 1 → p(y |x ) = 1/(1 + exp(−yf ))
+
+◮
+
+− log2 p({y }N
+1)=
+
+◮
+
+ℓ′′ > 0, ℓ(µ) > 1[µ < 0] ∀µ ∈ R.
+
+◮
+
+
+
+
+
+−yi f (xi ) ≡
+i log2 1 + e
+
+P
+
+P
+
+i
+
+ℓ(yi f (xi ))
+
+∴ maximizing log-likelihood is minimizing a surrogate convex
+loss function for classification
+
+tangent: logistic function as surrogate loss function
+
+◮
+
+define f (x ) ≡ log p(y = 1|x )/p(y = −1|x ) ∈ R
+
+◮
+
+p(y = 1|x ) + p(y = −1|x ) = 1 → p(y |x ) = 1/(1 + exp(−yf ))
+
+◮
+
+− log2 p({y }N
+1)=
+
+◮
+
+ℓ′′ > 0, ℓ(µ) > 1[µ < 0] ∀µ ∈ R.
+
+◮
+
+◮
+
+
+
+
+
+−yi f (xi ) ≡
+i log2 1 + e
+
+P
+
+P
+
+i
+
+ℓ(yi f (xi ))
+
+∴ maximizing log-likelihood is minimizing a surrogate convex
+loss functionfor classification
+
+but
+
+P
+
+i
+
+log2 1 + e−yi w
+
+T h(x )
+i
+
+not as easy as
+
+P −yi w T h(xi )
+e
+i
+
+boosting 1
+
+L exponential surrogate loss function, summed over examples:
+◮
+
+L[F ] =
+
+P
+
+i
+
+exp (−yi F (xi ))
+
+boosting 1
+
+L exponential surrogate loss function, summed over examples:
+◮
+◮
+
+L[F ] = i exp (−yi F (xi )) 
+P
+P
+= i exp −yi tt ′ wt ′ ht ′ (xi ) ≡ Lt (wt )
+P
+
+boosting 1
+
+L exponential surrogate loss function, summed over examples:
+◮
+◮
+◮
+
+L[F ] = i exp (−yi F (xi )) 
+P
+P
+= i exp −yi tt ′ wt ′ ht ′ (xi ) ≡ Lt (wt )
+Draw ht ∈ H large space of rules s.t. h(x ) ∈ {−1, +1}
+P
+
+boosting 1
+
+L exponential surrogate loss function, summed over examples:
+◮
+◮
+◮
+◮
+
+L[F ] = i exp (−yi F (xi )) 
+P
+P
+= i exp −yi tt ′ wt ′ ht ′ (xi ) ≡ Lt (wt )
+Draw ht ∈ H large space of rules s.t. h(x ) ∈ {−1, +1}
+label y ∈ {−1, +1}
+P
+
+boosting 1
+
+L exponential surrogate loss function, summed over examples:
+◮
+
+Lt+1 (wt ; w ) ≡
+
+P
+
+i
+
+dit exp (−yi wht+1 (xi ))
+
+Punchlines: sparse, predictive, interpretable, fast (to execute), and
+easy to extend, e.g., trees, flexible hypotheses spaces, L1 , L∞ 4 , . . .
+
+boosting 1
+
+L exponential surrogate loss function, summed over examples:
+◮
+◮
+
+Lt+1 (wt ; w ) ≡ i dit exp (−yi wht+1 (xi ))
+P
+P
+= y =h′ dit e−w + y 6=h′ dit e+w ≡ e−w D+ + e+w D−
+P
+
+Punchlines: sparse, predictive, interpretable, fast (to execute), and
+easy to extend, e.g., trees, flexible hypotheses spaces, L1 , L∞ 4 , . . .
+
+boosting 1
+
+L exponential surrogate loss function, summed over examples:
+◮
+◮
+◮
+
+Lt+1 (wt ; w ) ≡ i dit exp (−yi wht+1 (xi ))
+P
+P
+= y =h′ dit e−w + y 6=h′ dit e+w ≡ e−w D+ + e+w D−
+∴ wt+1 = argminw Lt+1 (w ) = (1/2) log D+ /D−
+P
+
+Punchlines: sparse, predictive, interpretable, fast (to execute), and
+easy to extend, e.g., trees, flexible hypotheses spaces, L1 , L∞ 4 , . . .
+
+boosting 1
+
+L exponential surrogate loss function, summed over examples:
+◮
+◮
+◮
+◮
+
+Lt+1 (wt ; w ) ≡ i dit exp (−yi wht+1 (xi ))
+P
+P
+= y =h′ dit e−w + y 6=h′ dit e+w ≡ e−w D+ + e+w D−
+∴ wt+1 = argmin
+p(1/2) log D+ /D−
+pw Lt+1 (w ) =
+Lt+1 (wt+1 ) = 2 D+ D− = 2 ν+ (1 − ν+ )/D, where
+0 ≤ ν+ ≡ D+ /D = D+ /Lt ≤ 1
+P
+
+Punchlines: sparse, predictive, interpretable, fast (to execute), and
+easy to extend, e.g., trees, flexible hypotheses spaces, L1 , L∞ 4 , . . .
+
+boosting 1
+
+L exponential surrogate loss function, summed over examples:
+◮
+◮
+◮
+◮
+
+◮
+
+Lt+1 (wt ; w ) ≡ i dit exp (−yi wht+1 (xi ))
+P
+P
+= y =h′ dit e−w + y 6=h′ dit e+w ≡ e−w D+ + e+w D−
+∴ wt+1 = argmin
+p(1/2) log D+ /D−
+pw Lt+1 (w ) =
+Lt+1 (wt+1 ) = 2 D+ D− = 2 ν+ (1 − ν+ )/D, where
+0 ≤ ν+ ≡ D+ /D = D+ /Lt ≤ 1
+update example weights dit+1 = dit e∓w
+P
+
+Punchlines: sparse, predictive, interpretable, fast (to execute), and
+easy to extend, e.g., trees, flexible hypotheses spaces, L1 , L∞ 4 , . . .
+
+4
+
+Duchi + Singer “Boosting with structural sparsity” ICML ’09
+
+svm
+
+

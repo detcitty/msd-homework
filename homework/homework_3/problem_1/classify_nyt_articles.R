@@ -10,15 +10,19 @@ business <- read.table('business.tsv', quote="",header=TRUE, sep="\t")
 world <- read.table('world.tsv', quote="", header=TRUE, sep="\t", encoding = "utf-8")
 
 # create a Corpus from the article snippets
+source.business <- DataframeSource(business)
+source.world <- DataframeSource(world)
 
-# VCorpus?
-# Corpus
+business.Corpus <- Corpus(VectorSource(business$snippet))
+world.Corpus <- Corpus(VectorSource(world$snippet))
 
 # create a DocumentTermMatrix from the snippet Corpus
 # remove punctuation and numbers
+dtm.business <- DocumentTermMatrix(business.Corpus, control = list(removePunctuation = TRUE, 
+                                                                   stopwords = TRUE))
 
-# What is a DocumentTermMatrix?
-# How does this relate to what I'm doing? 
+dtm.world <- DocumentTermMatrix(world.Corpus, control = list(removePunctuation = TRUE,
+                                                             stopwords = TRUE))
 
 
 # convert the DocumentTermMatrix to a sparseMatrix, required by cv.glmnet
@@ -26,6 +30,9 @@ world <- read.table('world.tsv', quote="", header=TRUE, sep="\t", encoding = "ut
 dtm_to_sparse <- function(dtm) {
  sparseMatrix(i=dtm$i, j=dtm$j, x=dtm$v, dims=c(dtm$nrow, dtm$ncol), dimnames=dtm$dimnames)
 }
+
+sparseMatrix.business <- dtm_to_sparse(dtm.business)
+sparseMatrix.world. <- dtm_to_sparse(dtm.world)
 
 # create a train / test split
 
