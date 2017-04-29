@@ -145,33 +145,19 @@ for(i in power2) {
   
   nodes <- gorder(g)
   edges <- gsize(g)
+  
   num_connect_comps <- no.clusters(g)
   clus <- clusters(g)
-  mem <- clus$membership
+
+  test <- groups(clus)
   
-  test <- groups(clus)[1]
+  d <- adply(test, '1', length)
+
+  max_num_nodes_comp <- max(d$V1)
   
-  print(typeof(test))
+
   
-  #print(attributes(test$`1`))
-  print(length(test$`1`))
-  #max_clus <- which.max(clus)
-  
-  #print(attributes(mem))
-  
-  #print(list.edge.attributes(g))
-  #print(attributes(g))
-  
-  #print(num_connect_comps)
-  #print(g$num_email)
-  #print(clus$no)
-  group1 <- length(mem[mem==2])
-  #print(group1)
-  #print(g)
-  #freq_nodes <- count(df, "num_email")
-  #print(freq_nodes)
-  #plot(g)
-  #plot.igraph(g)
+
 }
 
 
