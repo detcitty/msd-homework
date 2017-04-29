@@ -140,14 +140,27 @@ adply(power2, function(x) {})
 for(i in power2) {
   df <- year2010 %>%
     filter(num_email > i)
+  
   g <- graph_from_data_frame(df, directed = FALSE, vertices = NULL)
+  
   nodes <- gorder(g)
   edges <- gsize(g)
   num_connect_comps <- no.clusters(g)
   clus <- clusters(g)
   mem <- clus$membership
   
+  test <- groups(clus)[1]
+  
+  print(typeof(test))
+  
+  #print(attributes(test$`1`))
+  print(length(test$`1`))
+  #max_clus <- which.max(clus)
+  
   #print(attributes(mem))
+  
+  #print(list.edge.attributes(g))
+  #print(attributes(g))
   
   #print(num_connect_comps)
   #print(g$num_email)
@@ -157,7 +170,8 @@ for(i in power2) {
   #print(g)
   #freq_nodes <- count(df, "num_email")
   #print(freq_nodes)
-  plot(g)
+  #plot(g)
+  #plot.igraph(g)
 }
 
 
