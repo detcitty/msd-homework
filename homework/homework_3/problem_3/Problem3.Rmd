@@ -84,59 +84,16 @@ for(threshold in power2) {
   
 }
 
-```{r}
-filter(year2010, num_email > power2) %>% count()
-#ddply(year2010, )
-
-
-mod_func <- function(arr, df, x) {   
-  arr <- filter(df, num_email > x) %>%
-    count()
-  return(arr)
-}
-
-ddply(power2, mod_func, df=year2010, x=power2)
-
-
-year2010 %>% 
-  rowwise() %>%
-  mutate(var = 1)
-
-boy <- function(df, x) {
-  df %>%
-  rowwise() %>%
-  add_column(var = x) %>%
-  #mutate(var = x)
-  
-  
-  return(df)
-}
-
-boy(year2010, 33)
-
-boy(year2010, power2)
-ddply(year2010, boy, x=power2)
-```
-
 
 
 
 ```{r}
-po <- as.data.frame(t(power2))
-po %>%
-  mutate_all()
+final_df  <- data.frame(nodes=integer(),
+                 edges=integer(), 
+                 num_connected_components=integer(), 
+                 percent_of_nodes_in_max_component=double(),
+                 ave_path_distance=double()) 
 
-year2010 %>%
-  
-  mutate_all(po)
-
-adply(power2, function(x) {})
-
-
-```
-
-
-```{r}
 for(i in power2) {
   df <- year2010 %>%
     filter(num_email > i)
@@ -155,13 +112,13 @@ for(i in power2) {
 
   max_num_nodes_comp <- max(d$V1)
   
-  paths_short <- all_shortest_paths(g, 1)
+  percent_connect_comp <- max_num_nodes_comp / nodes
   
-  #avg_distance <- mean_distance(g)
-  #print(paths_short)
-  
+  avg_distance <- mean_distance(g)
 
+  results = c(nodes, edges, num_connect_comps, percent_connect_comp, avg_distance)
   
+  final_df <- rbind(final_df, i = results)
 
 }
 
