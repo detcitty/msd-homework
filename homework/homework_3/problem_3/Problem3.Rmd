@@ -44,7 +44,7 @@ count_df
 # Graph
 
 ```{r}
-ggplot(count_df, aes(x=num_email, y =n)) +
+ggplot(count_df, aes(x=num_email, y=freq)) +
   geom_point() +
   scale_x_log10() +
   scale_y_log10()
@@ -52,9 +52,13 @@ ggplot(count_df, aes(x=num_email, y =n)) +
 
 ```
 
+```{r}
+
+```
+
 
 ```{r}
-ggplot(count_df, aes(x=n, y =num_email)) +
+ggplot(count_df, aes(x=freq, y =num_email)) +
   geom_point() +
   scale_x_log10() +
   scale_y_log10()
