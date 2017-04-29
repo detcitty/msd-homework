@@ -3,6 +3,10 @@ library(Matrix)
 library(glmnet)
 library(ROCR)
 library(ggplot2)
+library(caret)
+
+
+setwd("~/columbia/APMA4990/msd-homework/homework/homework_3/problem_1")
 
 # read business and world articles into one data frame
 
@@ -35,6 +39,36 @@ sparseMatrix.business <- dtm_to_sparse(dtm.business)
 sparseMatrix.world. <- dtm_to_sparse(dtm.world)
 
 # create a train / test split
+set.seed(2)
+
+train_percent <- 0.8
+
+ndx_business <- sample(nrow(business), floor(nrow(business) * train_percent))
+ndx_world <- sample(nrow(world), floor(nrow(world) * train_percent))
+
+train_business <- business[ndx_business,]
+test_business <- business[-ndx_business,]
+
+train_world <- world[ndx_world,]
+test_world <- world[-ndx_world,]
+
+
+# create a Corpus from the article snippets
+source.business <- DataframeSource(train_business)
+source.world <- DataframeSource(train_world)
+
+business.Corpus <- Corpus(VectorSource(business$snippet))
+world.Corpus <- Corpus(VectorSource(world$snippet))
+
+# create a DocumentTermMatrix from the snippet Corpus
+# remove punctuation and numbers
+dtm.business <- DocumentTermMatrix(business.Corpus, control = list(removePunctuation = TRUE, 
+                                                                   stopwords = TRUE))
+
+dtm.world <- DocumentTermMatrix(world.Corpus, control = list(removePunctuation = TRUE,
+                                                             stopwords = TRUE))
+
+
 
 # cross-validate logistic regression with cv.glmnet, measuring auc
 
