@@ -35,7 +35,7 @@ Use a log-log scale and comment on the result. What does it tell you about the d
 
 ```{r}
 count_df <- year2010 %>% 
-  count(num_email)
+  count('num_email')
 
 count_df
 
@@ -147,7 +147,7 @@ for(i in power2) {
   clus <- clusters(g)
   mem <- clus$membership
   
-  print(attributes(mem))
+  #print(attributes(mem))
   
   #print(num_connect_comps)
   #print(g$num_email)
@@ -157,6 +157,7 @@ for(i in power2) {
   #print(g)
   #freq_nodes <- count(df, "num_email")
   #print(freq_nodes)
+  str(g)
 }
 
 
