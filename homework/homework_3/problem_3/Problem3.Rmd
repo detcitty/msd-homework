@@ -155,6 +155,11 @@ for(i in power2) {
 
   max_num_nodes_comp <- max(d$V1)
   
+  paths_short <- all_shortest_paths(g, 1)
+  
+  #avg_distance <- mean_distance(g)
+  #print(paths_short)
+  
 
   
 
