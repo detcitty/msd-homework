@@ -68,7 +68,8 @@ dtm.business <- DocumentTermMatrix(business.Corpus, control = list(removePunctua
 dtm.world <- DocumentTermMatrix(world.Corpus, control = list(removePunctuation = TRUE,
                                                              stopwords = TRUE))
 
-
+sparseMatrix.business <- dtm_to_sparse(dtm.business)
+sparseMatrix.world <- dtm_to_sparse(dtm.world)
 
 # cross-validate logistic regression with cv.glmnet, measuring auc
 
