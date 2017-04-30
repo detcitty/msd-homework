@@ -35,7 +35,7 @@ Use a log-log scale and comment on the result. What does it tell you about the d
 
 ```{r}
 count_df <- year2010 %>% 
-  count(num_email)
+  count('num_email')
 
 count_df
 
@@ -44,7 +44,7 @@ count_df
 # Graph
 
 ```{r}
-ggplot(count_df, aes(x=num_email, y =n)) +
+ggplot(count_df, aes(x=num_email, y=freq)) +
   geom_point() +
   scale_x_log10() +
   scale_y_log10()
@@ -52,9 +52,13 @@ ggplot(count_df, aes(x=num_email, y =n)) +
 
 ```
 
+```{r}
+
+```
+
 
 ```{r}
-ggplot(count_df, aes(x=n, y =num_email)) +
+ggplot(count_df, aes(x=freq, y =num_email)) +
   geom_point() +
   scale_x_log10() +
   scale_y_log10()
@@ -84,53 +88,43 @@ for(threshold in power2) {
   
 }
 
-```{r}
-filter(year2010, num_email > power2) %>% count()
-#ddply(year2010, )
-
-
-mod_func <- function(arr, df) {   
-  filter(df, num_email > x) %>%
-    count()
-  data.frame(num_nodes = countnodes)
-}
-
-adply(power2, mod_func, df=year2010)
-
-
-year2010 %>% 
-  rowwise() %>%
-  mutate(var = 1)
-
-boy <- function(df, x) {
-  df %>%
-  rowwise() %>%
-  add_column(var = x) %>%
-  #mutate(var = x)
-  
-  
-  return(df)
-}
-
-boy(year2010, 33)
-
-boy(year2010, power2)
-ddply(year2010, boy, x=power2)
-```
-
 
 
 
 ```{r}
-po <- as.data.frame(t(power2))
-po %>%
-  mutate_all()
+final_df  <- data.frame(nodes=integer(),
+                 edges=integer(), 
+                 num_connected_components=integer(), 
+                 percent_of_nodes_in_max_component=double(),
+                 ave_path_distance=double()) 
 
-year2010 %>%
+for(i in power2) {
+  df <- year2010 %>%
+    filter(num_email > i)
   
-  mutate_all(po)
+  g <- graph_from_data_frame(df, directed = FALSE, vertices = NULL)
+  
+  nodes <- gorder(g)
+  edges <- gsize(g)
+  
+  num_connect_comps <- no.clusters(g)
+  clus <- clusters(g)
 
-adply(power2, function(x) {})
+  test <- groups(clus)
+  
+  d <- adply(test, '1', length)
+
+  max_num_nodes_comp <- max(d$V1)
+  
+  percent_connect_comp <- max_num_nodes_comp / nodes
+  
+  avg_distance <- mean_distance(g)
+
+  results = c(nodes, edges, num_connect_comps, percent_connect_comp, avg_distance)
+  
+  final_df <- rbind(final_df, i = results)
+
+}
 
 
 ```
