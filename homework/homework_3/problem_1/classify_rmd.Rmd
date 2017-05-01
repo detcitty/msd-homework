@@ -1,3 +1,17 @@
+---
+title: "Homework"
+author: "Devin Etcitty"
+date: "5/1/2017"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
 library(tm)
 library(Matrix)
 library(glmnet)
@@ -7,12 +21,16 @@ library(caret)
 library(tidyverse)
 library(scales)
 
-setwd("~/columbia/APMA4990/msd-homework/homework/homework_3/problem_1")
-#setwd("~/Documents/Columbia/msd-apam4990/msd2017/homework/homework_3/problem_1")
+#setwd("~/columbia/APMA4990/msd-homework/homework/homework_3/problem_1")
+setwd("~/Documents/Columbia/msd-apam4990/msd2017/homework/homework_3/problem_1")
+
+```
+
+
 
 
 # read business and world articles into one data frame
-
+```{r}
 business <- read.table('business.tsv', quote="",header=TRUE, sep="\t", encoding= 'utf-8')
 business <- business %>%
   mutate(section = 'business')
@@ -25,28 +43,44 @@ paper_df <- bind_rows(business, world)
 
 paper_df$section <- as.factor(paper_df$section)
 
+```
+
 
 # create a Corpus from the article snippets
 
+```{r}
 corpus_paper <- DataframeSource(paper_df)
 
 all_corpus <- Corpus(VectorSource(paper_df$snippet))
 
+
+```
+
+
+
 # create a DocumentTermMatrix from the snippet Corpus
 # remove punctuation and numbers
+```{r}
+
 dtm.paper <- DocumentTermMatrix(all_corpus, control = list(removePunctuation = TRUE, 
                                                                    stopwords = TRUE))
-
+```
 
 # convert the DocumentTermMatrix to a sparseMatrix, required by cv.glmnet
 # helper function
+
+```{r}
 dtm_to_sparse <- function(dtm) {
  sparseMatrix(i=dtm$i, j=dtm$j, x=dtm$v, dims=c(dtm$nrow, dtm$ncol), dimnames=dtm$dimnames)
 }
 
 sparseMatrix.paper <- dtm_to_sparse(dtm.paper)
 
+```
+
 # create a train / test split
+```{r}
+
 set.seed(48)
 
 train_percent <- 0.8
@@ -69,33 +103,59 @@ df <- data.frame(actual = test_all$section,
   
   mutate(pred = if_else(X1 > 0, 'world', 'business'))
 
+
+```
 # evaluate performance for the best-fit model
+
+
+```{r}
 plot(fit)
 head(df)
 
 table(actual = df$actual, predicted = df$pred)
+
+```
+
 # accuracy: fraction of correct classifications
+```{r}
+
 df %>%
   summarize(acc = mean(pred == actual))
-
+```
 # precision: fraction of positive predictions that are actually true
+
+```{r}
+
 df %>%
   filter(pred == 'business') %>%
   summarize(prec = mean(actual == 'business'))
+```
 
 # recall: fraction of true examples that we predicted to be positive
 # aka true positive rate, sensitivity
+```{r}
+
+
 df %>%
   filter(actual == 'business') %>%
   summarize(recall = mean(pred == 'business'))
 
+
+```
+
 # false positive rate: fraction of false examples that we predicted to be positive
+```{r}
+
 df %>%
   filter(actual == 'world') %>%
   summarize(fpr = mean(pred == 'business'))
 
+```
+
 
 # plot ROC curve and output accuracy and AUC
+
+```{r}
 plot_data = test_all
 plot_data$probs <- predict(fit, test_sparseMatrix, type="response")
 ggplot(plot_data, aes(x = probs)) +
@@ -103,9 +163,13 @@ ggplot(plot_data, aes(x = probs)) +
   xlab('Predicted probability of world') +
   ylab('Number of examples')
 
+```
+
 
 
 # plot calibration
+```{r}
+
 data.frame(predicted=plot_data$probs, actual=test_all$section) %>%
   group_by(X1=round(X1*10)/10) %>%
   summarize(num=n(), actual=mean(actual == "world")) %>%
@@ -131,9 +195,13 @@ ndx_pos <- sample(which(actual == 1), size=100, replace=T)
 ndx_neg <- sample(which(actual == 0), size=100, replace=T)
 mean(predicted[ndx_pos] > predicted[ndx_neg])
 
+```
+
 
 # extract coefficients for words with non-zero weight
 # helper function
+```{r}
+
 get_informative_words <- function(crossval) {
   coefs <- coef(crossval, s="lambda.min")
   coefs <- as.data.frame(as.matrix(coefs))
@@ -143,10 +211,10 @@ get_informative_words <- function(crossval) {
   subset(coefs, weight != 0)
 }
 
-
+```
 # show weights on words with top 10 weights for business
 
-
+```{r}
 weights <- get_informative_words(fit)
 
 business_weights <- weights %>%
@@ -155,11 +223,15 @@ business_weights <- weights %>%
 
 business_weights
 
+```
 
 # show weights on words with top 10 weights for world
 
+
+```{r}
 world_weights <- weights %>%
   arrange(desc(weight)) %>%
   top_n(10, weight)
 
 world_weights
+```
