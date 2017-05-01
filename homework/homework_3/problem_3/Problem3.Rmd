@@ -136,30 +136,63 @@ final_df
 ```{r}
 ggplot(final_df, aes(x=power2, y=nodes)) +
   scale_x_log10() +
-  geom_point()
+  geom_point() +
+  labs(title = "Number of Nodes")
 ```
+
+The number of nodes decreases as the threshold value increases.
 
 ```{r}
 ggplot(final_df, aes(x=power2, y=edges)) +
   scale_x_log10() +
-  geom_point()
+  geom_point() +
+  labs(title = "Number of Edges")
 ```
+
+The number of edges is descresing as the threshold increases
 
 
 ```{r}
 ggplot(final_df, aes(x=power2, y=num_connect_comps)) +
   scale_x_log10() +
-  geom_point()
+  geom_point() +
+  labs(title = "Number of connected Components")
+```
+```{r}
+df_peak <- year2010 %>%
+  filter(num_email > 256)
+
+g_peak <- graph_from_data_frame(df_peak, directed = FALSE, vertices = NULL)
+num_connect_comps <- no.clusters(g_peak)
+num_connect_comps
+plot(g_peak, vertex.label=NA)
+```
+
+
+
+
+```{r}
+
+next_df <- year2010 %>%
+  filter(num_email > 516)
+
+g_next <- graph_from_data_frame(next_df, directed = FALSE, vertices = NULL)
+num_connect_comps <- no.clusters(g_next)
+num_connect_comps
+plot(g_next, vertex.label=NA)
 ```
 
 ```{r}
 ggplot(final_df, aes(x=power2, y=percent_connect_comp)) +
   scale_x_log10() +
-  geom_point()
+  geom_point() +
+  labs(title = "Percent of the nodes in the largest connected component ")
 ```
+
 
 ```{r}
 ggplot(final_df, aes(x=power2, y=avg_distance)) +
   scale_x_log10() +
-  geom_point()
+  geom_point() +
+  labs(title = "Average distance to get from one node to the next")
 ```
