@@ -4,29 +4,37 @@ library(glmnet)
 library(ROCR)
 library(ggplot2)
 library(caret)
+library(tidyverse)
 
+#setwd("~/columbia/APMA4990/msd-homework/homework/homework_3/problem_1")
+setwd("~/Documents/Columbia/msd-apam4990/msd2017/homework/homework_3/problem_1")
 
-setwd("~/columbia/APMA4990/msd-homework/homework/homework_3/problem_1")
 
 # read business and world articles into one data frame
 
-business <- read.table('business.tsv', quote="",header=TRUE, sep="\t")
+business <- read.table('business.tsv', quote="",header=TRUE, sep="\t", encoding= 'utf-8')
+business <- business %>%
+  mutate(section = 'business')
 world <- read.table('world.tsv', quote="", header=TRUE, sep="\t", encoding = "utf-8")
 
-# create a Corpus from the article snippets
-source.business <- DataframeSource(business)
-source.world <- DataframeSource(world)
+world <- world %>%
+  mutate(section = 'world')
 
-business.Corpus <- Corpus(VectorSource(business$snippet))
-world.Corpus <- Corpus(VectorSource(world$snippet))
+paper_df <- bind_rows(business, world)
+
+paper_df$section <- as.factor(paper_df$section)
+
+
+# create a Corpus from the article snippets
+
+corpus_paper <- DataframeSource(paper_df)
+
+all_corpus <- Corpus(VectorSource(paper_df$snippet))
 
 # create a DocumentTermMatrix from the snippet Corpus
 # remove punctuation and numbers
-dtm.business <- DocumentTermMatrix(business.Corpus, control = list(removePunctuation = TRUE, 
+dtm.paper <- DocumentTermMatrix(all_corpus, control = list(removePunctuation = TRUE, 
                                                                    stopwords = TRUE))
-
-dtm.world <- DocumentTermMatrix(world.Corpus, control = list(removePunctuation = TRUE,
-                                                             stopwords = TRUE))
 
 
 # convert the DocumentTermMatrix to a sparseMatrix, required by cv.glmnet
@@ -35,47 +43,62 @@ dtm_to_sparse <- function(dtm) {
  sparseMatrix(i=dtm$i, j=dtm$j, x=dtm$v, dims=c(dtm$nrow, dtm$ncol), dimnames=dtm$dimnames)
 }
 
-sparseMatrix.business <- dtm_to_sparse(dtm.business)
-sparseMatrix.world. <- dtm_to_sparse(dtm.world)
+sparseMatrix.paper <- dtm_to_sparse(dtm.paper)
 
 # create a train / test split
-set.seed(2)
+set.seed(48)
 
 train_percent <- 0.8
 
-ndx_business <- sample(nrow(business), floor(nrow(business) * train_percent))
-ndx_world <- sample(nrow(world), floor(nrow(world) * train_percent))
+ndx_all <- sample(nrow(paper_df), floor(nrow(paper_df) * train_percent))
 
-train_business <- business[ndx_business,]
-test_business <- business[-ndx_business,]
-
-train_world <- world[ndx_world,]
-test_world <- world[-ndx_world,]
+train_all <- paper_df[ndx_all,]
+test_all <- paper_df[-ndx_all,]
 
 
 # create a Corpus from the article snippets
-source.business <- DataframeSource(train_business)
-source.world <- DataframeSource(train_world)
+#source.train <- DataframeSource(train_all)
+#source.test <- DataframeSource(test_all)
 
-business.Corpus <- Corpus(VectorSource(business$snippet))
-world.Corpus <- Corpus(VectorSource(world$snippet))
+traincorpus_all <- Corpus(VectorSource(train_all$snippet))
+test_corpus <- Corpus(VectorSource(test_all$snippet))
 
 # create a DocumentTermMatrix from the snippet Corpus
 # remove punctuation and numbers
-dtm.business <- DocumentTermMatrix(business.Corpus, control = list(removePunctuation = TRUE, 
+dtm_train <- DocumentTermMatrix(traincorpus_all, control = list(removePunctuation = TRUE, 
                                                                    stopwords = TRUE))
+dtm_test <- DocumentTermMatrix(test_corpus, control = list(removePunctuation = TRUE, 
+                                                               stopwords = TRUE))
 
-dtm.world <- DocumentTermMatrix(world.Corpus, control = list(removePunctuation = TRUE,
-                                                             stopwords = TRUE))
+sparseMatrix_train <- dtm_to_sparse(dtm_train)
+sparseMatrix_test <- dtm_to_sparse(dtm_test)
 
-sparseMatrix.business <- dtm_to_sparse(dtm.business)
-sparseMatrix.world <- dtm_to_sparse(dtm.world)
 
 # cross-validate logistic regression with cv.glmnet, measuring auc
 
+
+fit <- cv.glmnet(sparseMatrix_train, train_all$section, family='binomial', type.measure = 'auc')
+
+plot(fit, xvar = "dev", label = TRUE)
+
+
+
+#newX <- model.matrix(~.,data=test_all)
+
+#fit_test <- predict(fit, newx=newX)
+
+df <- data.frame(actual = test_all$section,
+                 log_odds = predict(fit, test_all, type='class')) %>%
+  mutate(pred = ifelse(log_odds > 0, 'business', 'world'))
+
 # evaluate performance for the best-fit model
+plot(fit)
+
+
 
 # plot ROC curve and output accuracy and AUC
+
+
 
 # extract coefficients for words with non-zero weight
 # helper function
@@ -89,5 +112,7 @@ get_informative_words <- function(crossval) {
 }
 
 # show weights on words with top 10 weights for business
+
+
 
 # show weights on words with top 10 weights for world
