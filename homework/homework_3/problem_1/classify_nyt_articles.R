@@ -5,6 +5,7 @@ library(ROCR)
 library(ggplot2)
 library(caret)
 library(tidyverse)
+library(scales)
 
 #setwd("~/columbia/APMA4990/msd-homework/homework/homework_3/problem_1")
 setwd("~/Documents/Columbia/msd-apam4990/msd2017/homework/homework_3/problem_1")
@@ -52,52 +53,83 @@ train_percent <- 0.8
 
 ndx_all <- sample(nrow(paper_df), floor(nrow(paper_df) * train_percent))
 
-train_all <- paper_df[ndx_all,]
+train_all <- paper_df[ndx_all, ]
 test_all <- paper_df[-ndx_all,]
 
+train_sparseMatrix <- sparseMatrix.paper[ndx_all, , drop=FALSE]
+test_sparseMatrix <- sparseMatrix.paper[-ndx_all, , drop=FALSE]
 
-# create a Corpus from the article snippets
-#source.train <- DataframeSource(train_all)
-#source.test <- DataframeSource(test_all)
-
-traincorpus_all <- Corpus(VectorSource(train_all$snippet))
-test_corpus <- Corpus(VectorSource(test_all$snippet))
-
-# create a DocumentTermMatrix from the snippet Corpus
-# remove punctuation and numbers
-dtm_train <- DocumentTermMatrix(traincorpus_all, control = list(removePunctuation = TRUE, 
-                                                                   stopwords = TRUE))
-dtm_test <- DocumentTermMatrix(test_corpus, control = list(removePunctuation = TRUE, 
-                                                               stopwords = TRUE))
-
-sparseMatrix_train <- dtm_to_sparse(dtm_train)
-sparseMatrix_test <- dtm_to_sparse(dtm_test)
-
-
-# cross-validate logistic regression with cv.glmnet, measuring auc
-
-
-fit <- cv.glmnet(sparseMatrix_train, train_all$section, family='binomial', type.measure = 'auc')
+fit <- cv.glmnet(train_sparseMatrix, train_all$section, family='binomial', type.measure = 'auc')
 
 plot(fit, xvar = "dev", label = TRUE)
 
 
-
-#newX <- model.matrix(~.,data=test_all)
-
-#fit_test <- predict(fit, newx=newX)
-
 df <- data.frame(actual = test_all$section,
-                 log_odds = predict(fit, test_all, type='class')) %>%
-  mutate(pred = ifelse(log_odds > 0, 'business', 'world'))
+                 log_odds = predict(fit, test_sparseMatrix)) %>%
+  
+  mutate(pred = if_else(X1 > 0, 'world', 'business'))
 
 # evaluate performance for the best-fit model
 plot(fit)
+head(df)
 
+table(actual = df$actual, predicted = df$pred)
+# accuracy: fraction of correct classifications
+df %>%
+  summarize(acc = mean(pred == actual))
+
+# precision: fraction of positive predictions that are actually true
+df %>%
+  filter(pred == 'business') %>%
+  summarize(prec = mean(actual == 'business'))
+
+# recall: fraction of true examples that we predicted to be positive
+# aka true positive rate, sensitivity
+df %>%
+  filter(actual == 'business') %>%
+  summarize(recall = mean(pred == 'business'))
+
+# false positive rate: fraction of false examples that we predicted to be positive
+df %>%
+  filter(actual == 'world') %>%
+  summarize(fpr = mean(pred == 'business'))
 
 
 # plot ROC curve and output accuracy and AUC
+plot_data = test_all
+plot_data$probs <- predict(fit, test_sparseMatrix, type="response")
+ggplot(plot_data, aes(x = probs)) +
+  geom_histogram(binwidth = 0.01) +
+  xlab('Predicted probability of world') +
+  ylab('Number of examples')
 
+
+
+# plot calibration
+data.frame(predicted=plot_data$probs, actual=test_all$section) %>%
+  group_by(X1=round(X1*10)/10) %>%
+  summarize(num=n(), actual=mean(actual == "world")) %>%
+  ggplot(data=., aes(x=X1, y=actual, size=num)) +
+  geom_point() +
+  geom_abline(linetype=2) +
+  scale_x_continuous(labels=percent, lim=c(0,1)) +
+  scale_y_continuous(labels=percent, lim=c(0,1)) +
+  xlab('Predicted probability of world') +
+  ylab('Percent that are actually world')
+
+
+pred <- prediction(plot_data$probs, test_all$section)
+perf_lr <- performance(pred, measure='tpr', x.measure='fpr')
+plot(perf_lr)
+performance(pred, 'auc')
+
+
+
+predicted <- plot_data$probs
+actual <- test_all$section == "world"
+ndx_pos <- sample(which(actual == 1), size=100, replace=T)
+ndx_neg <- sample(which(actual == 0), size=100, replace=T)
+mean(predicted[ndx_pos] > predicted[ndx_neg])
 
 
 # extract coefficients for words with non-zero weight
@@ -111,8 +143,15 @@ get_informative_words <- function(crossval) {
   subset(coefs, weight != 0)
 }
 
+
+
 # show weights on words with top 10 weights for business
 
 
 
+business_weights <- get_informative_words(fit)
+head(business_weights)
 # show weights on words with top 10 weights for world
+
+world_weights <- get_informative_words(fit)
+head(world_weights)
