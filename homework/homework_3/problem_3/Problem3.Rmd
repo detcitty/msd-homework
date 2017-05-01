@@ -67,12 +67,6 @@ ggplot(count_df, aes(x=freq, y =num_email)) +
 ```
 
 
-```{r}
-ggplot(count_df, aes(x=num_email, y=n)) +
-  geom_jitter() +
-  scale_x_log10(name = "Number of Emails Sent", labels=comma) +
-  scale_y_log10(name = "Number of People", labels=comma) 
-```
 
 
 ```{r}
@@ -80,14 +74,6 @@ power2 <- 2^(0:10)
 power2 <- append(power2, 0, 0)
 power2
 ```
-
-
-for(threshold in power2) {
-  filter(year2010, num_email > threshold) %>%
-    count() %>%
-    print()
-  
-}
 
 
 
@@ -130,3 +116,45 @@ for(i in power2) {
 
 ```
 
+
+
+```{r}
+colnames(final_df) <- c("nodes", "edges", "num_connect_comps", 
+                     "percent_connect_comp", "avg_distance")
+```
+
+
+```{r}
+final_df <- cbind(power2, final_df)
+```
+
+```{r}
+final_df
+```
+
+
+```{r}
+ggplot(final_df, aes(x=power2, y=nodes)) +
+  geom_point()
+```
+
+```{r}
+ggplot(final_df, aes(x=power2, y=edges)) +
+  geom_point()
+```
+
+
+```{r}
+ggplot(final_df, aes(x=power2, y=num_connect_comps)) +
+  geom_point()
+```
+
+```{r}
+ggplot(final_df, aes(x=power2, y=percent_connect_comp)) +
+  geom_point()
+```
+
+```{r}
+ggplot(final_df, aes(x=power2, y=avg_distance)) +
+  geom_point()
+```
