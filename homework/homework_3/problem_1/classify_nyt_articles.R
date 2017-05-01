@@ -144,14 +144,22 @@ get_informative_words <- function(crossval) {
 }
 
 
-
 # show weights on words with top 10 weights for business
 
 
+weights <- get_informative_words(fit)
 
-business_weights <- get_informative_words(fit)
-head(business_weights)
+business_weights <- weights %>%
+  arrange(weight) %>%
+  top_n(-10, weight)
+
+business_weights
+
+
 # show weights on words with top 10 weights for world
 
-world_weights <- get_informative_words(fit)
-head(world_weights)
+world_weights <- weights %>%
+  arrange(desc(weight)) %>%
+  top_n(10, weight)
+
+world_weights
