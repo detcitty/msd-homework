@@ -2,7 +2,9 @@
 title: "Problem3"
 author: "Devin Etcitty"
 date: "4/25/2017"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -23,8 +25,8 @@ library(reshape2)
 First, read in the edge list for 2010 from the undweighted10.dat file
 
 ```{r}
-setwd("~/columbia/APMA4990/msd-homework/homework/homework_3/problem_3")
-#setwd("~/Documents/Columbia/msd-apam4990/msd2017/homework/homework_3/problem_3")
+#setwd("~/columbia/APMA4990/msd-homework/homework/homework_3/problem_3")
+setwd("~/Documents/Columbia/msd-apam4990/msd2017/homework/homework_3/problem_3")
 year2010 <- read.delim("undweighted10.dat", header = FALSE, sep = ' ')
 colnames(year2010) <- c('userID1', 'userID2', 'num_email')
 
@@ -38,7 +40,7 @@ Use a log-log scale and comment on the result. What does it tell you about the d
 count_df <- year2010 %>% 
   count('num_email')
 
-count_df
+#count_df
 
 ```
 
