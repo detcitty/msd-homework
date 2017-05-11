@@ -8,6 +8,8 @@ library(ggplot2)
 # READ AND TRANSFORM THE DATA
 ########################################
 
+setwd("~/columbia/APMA4990/msd-homework/homework/homework_1/problem_2")
+
 # read one month of data
 trips <- read_csv('201608-citibike-tripdata.csv')
 
@@ -49,7 +51,18 @@ min(trips["birth_year"], na.rm = TRUE)
 
 # use filter and grepl to find all trips that either start or end on broadway
 
+start_filter <- grepl("broadway", trips$start_station_name, ignore.case=TRUE)
+
+end_filter <- grepl("broadway", trips$end_station_name, ignore.case=TRUE)
+
+compare_or <- start_filter | end_filter
+
+trips[compare_or,]
+
 # do the same, but find all trips that both start and end on broadway
+compare_and <- start_filter & end_filter
+
+trips[compare_and, ]
 
 # find all unique station names
 select(trips, start_station_name) %>%
@@ -70,12 +83,21 @@ filter(trips, gender == "Female") %>%
 
 # compute the average trip time by gender
 # comment on whether there's a (statistically) significant difference
+select(trips, starttime, stoptime, gender) %>%
+  group_by(gender) %>%
+  mutate(totalTime = stoptime - starttime)
 
 # find the 10 most frequent station-to-station trips
 
+
+
 # find the top 3 end stations for trips starting from each start station
 
+
+
 # find the top 3 most common station-to-station trips by gender
+
+
 
 # find the day with the most trips
 # tip: first add a column for year/month/day without time of day (use as.Date or floor_date from the lubridate package)

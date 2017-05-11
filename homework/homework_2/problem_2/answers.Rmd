@@ -60,11 +60,91 @@ cv5
 make a plot showing the how the train and test error vary with the polynomial degree
 ```{r}
 
+cv5 %>% 
+  mutate(train = map(train, as_tibble)) %>%
+  mutate(model = map(train, ~ lm(y ~ x, data=.))) %>%
+  mutate(rmse = map2_dbl(model, test, rmse)) %>%
+  select(.id, rmse)
+
+
 ```
+
+
+```{r}
+cv5 %>% 
+  mutate(train = map(train, as_tibble)) %>%
+  mutate(model = map(train, ~ lm(y ~ x + I(x)^2, data=.))) %>%
+  mutate(rmse = map2_dbl(model, test, rmse)) %>%
+  select(.id, rmse)
+
+
+```
+
+```{r}
+cv5 %>% 
+  mutate(train = map(train, as_tibble)) %>%
+  mutate(model = map(train, ~ as.formula(y ~ poly(x, 3, raw = T)), data=.)) %>%
+  mutate(rmse = map2_dbl(model, test, rmse)) %>%
+  select(.id, rmse)
+```
+
+
+```{r}
+K <- 20
+form <- as.formula(y ~ poly(x, K, raw=T))
+ddply(cv5, .(test, test), as.data.frame)
+M <- model.matrix(form, model_data)
+head(M)
+```
+```{r}
+cv5_new <- cv5 %>%
+  mutate(model = map(train, ~ as.formula( y ~ poly(x, K, raw=T)  ) ) )
+
+cv5_new$model[[1]] %>% summary()
+```
+
+
+
+```{r}
+K <- 1:30
+
+coeff_all_models = matrix(0, ncol = 30, nrow = 0)
+
+test <- cv5$train
+train <- cv5$train
+
+model = df
+for (j in K) 
+{
+  
+  for ( i in nrow(cv5))
+  {
+    one_train_df <- as.data.frame(test[i])
+    sub_test_df <- as.data.frame(test[i])
+    
+    colnames(one_train_df) =c ("x", "y")
+    colnames(sub_test_df) =c ("x", "y")
+    
+    form <- as.formula(y ~ poly(x, j, raw=T))
+    M <- model.matrix(form, one_train_df)
+    model <- lm(form, one_train_df)
+    coefs <- (model$coefficients)
+    blank <- integer(j)
+    
+    coeff_all_models[1] <- coefs
+
+    #cbind(coeff_all_models, coefs)
+    
+  
+  }
+}
+```
+
 
 
 select the degree with the lowest average test error
 ```{r}
+cv5_new$model
 
 ```
 
